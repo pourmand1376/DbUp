@@ -34,6 +34,15 @@ namespace DbUp.Engine
             this.SqlScriptOptions = sqlScriptOptions ?? new SqlScriptOptions();
         }
 
+
+        public SqlScript(string name, string contents, DateTime? applied, SqlScriptOptions sqlScriptOptions)
+        {
+            this.Name = name;
+            this.Contents = contents;
+            this.Applied = applied;
+            this.SqlScriptOptions = sqlScriptOptions ?? new SqlScriptOptions();
+        }
+
         /// <summary>
         /// Gets the contents of the script.
         /// </summary>
@@ -50,6 +59,11 @@ namespace DbUp.Engine
         /// </summary>
         /// <value></value>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the DateTime that the script was applied, or null if it hasn't been applied yet
+        /// </summary>
+        public DateTime? Applied { get; }
 
         /// <summary>
         /// Create a SqlScript from a file using Default encoding

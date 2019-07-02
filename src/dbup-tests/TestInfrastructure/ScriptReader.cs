@@ -131,7 +131,17 @@ namespace DbUp.Tests.TestInfrastructure
             get { throw new NotImplementedException(); }
         }
 
-        public object this[int i] => runScripts[currentIndex].Name;
+        public object this[int i]
+        {
+            get
+            {
+                if (i == 0) return runScripts[currentIndex].Name;
+                if (i == 1) return runScripts[currentIndex].Contents;
+                if (i == 2) return runScripts[currentIndex].Applied;
+
+                throw new Exception("Index not valid");
+            }
+        }
 
         public void Dispose()
         {

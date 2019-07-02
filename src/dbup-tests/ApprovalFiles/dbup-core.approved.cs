@@ -188,6 +188,8 @@ namespace DbUp.Engine
     {
         public SqlScript(string name, string contents) { }
         public SqlScript(string name, string contents, DbUp.Engine.SqlScriptOptions sqlScriptOptions) { }
+        public SqlScript(string name, string contents, System.Nullable<System.DateTime> applied, DbUp.Engine.SqlScriptOptions sqlScriptOptions) { }
+        public System.Nullable<System.DateTime> Applied { get; }
         public virtual string Contents { get; }
         public string Name { get; }
         public DbUp.Engine.SqlScriptOptions SqlScriptOptions { get; }
@@ -442,6 +444,7 @@ namespace DbUp.Support
     {
         RunOnce = 0
         RunAlways = 1
+        RunOnChange = 2
     }
     public class SqlCommandReader : DbUp.Support.SqlParser, System.IDisposable
     {

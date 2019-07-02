@@ -26,7 +26,7 @@ namespace DbUp.SQLite
 
         protected override string GetJournalEntriesSql()
         {
-            return $"select [ScriptName], [ScriptContents] from {FqSchemaTableName} order by [ScriptName]";
+            return $"select [ScriptName], [ScriptContents], [Applied] from {FqSchemaTableName} order by [ScriptName]";
         }
 
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName)

@@ -69,7 +69,7 @@ namespace DbUp.Oracle
         protected override string GetJournalEntriesSql()
         {
             var unquotedSchemaTableName = UnquotedSchemaTableName.ToUpper(English);
-            return $"select scriptname, scriptcontents from {unquotedSchemaTableName} order by scriptname";
+            return $"select scriptname, scriptcontents, applied from {unquotedSchemaTableName} order by scriptname";
         }
 
         protected override string DoesTableExistSql()

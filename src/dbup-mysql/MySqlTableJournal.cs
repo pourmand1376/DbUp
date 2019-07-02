@@ -30,7 +30,7 @@ namespace DbUp.MySql
         }
         protected override string GetJournalEntriesSql()
         {
-            return $"select scriptname, scriptcontents from {FqSchemaTableName} order by scriptname";
+            return $"select scriptname, scriptcontents, applied from {FqSchemaTableName} order by scriptname";
         }
 
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName)

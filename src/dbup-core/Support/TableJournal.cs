@@ -75,7 +75,8 @@ namespace DbUp.Support
                             {
                                 string name = (string)reader[0];
                                 string contents = (string)reader[1];
-                                scripts.Add(new SqlScript(name, contents));
+                                DateTime? applied = (DateTime?)reader[2];
+                                scripts.Add(new SqlScript(name, contents, applied, new SqlScriptOptions()));
                             }
                         }
                     }
