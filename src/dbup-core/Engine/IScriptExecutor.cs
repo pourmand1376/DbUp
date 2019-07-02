@@ -18,7 +18,8 @@ namespace DbUp.Engine
         /// </summary>
         /// <param name="script">The script.</param>
         /// <param name="variables">Variables to replace in the script</param>
-        void Execute(SqlScript script, IDictionary<string, string> variables);
+        /// <returns>The script with variables replaced</returns>
+        SqlScript Execute(SqlScript script, IDictionary<string, string> variables);
 
         /// <summary>
         /// Verifies the specified schema exists and is valid

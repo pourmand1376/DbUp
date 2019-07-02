@@ -12,6 +12,7 @@ Info:         Creating the [SchemaVersions] table
 DB Operation: Execute non query command: create table [SchemaVersions] (
     [Id] int identity(1,1) not null constraint [PK_SchemaVersions_Id] primary key,
     [ScriptName] nvarchar(255) not null,
+    [ScriptContents] ntext not null,
     [Applied] datetime not null
 )
 DB Operation: Dispose command
@@ -21,8 +22,10 @@ DB Operation: Dispose command
 DB Operation: Create parameter
 Info:         DB Operation: Add parameter to command: scriptName=Script0001.sql
 DB Operation: Create parameter
+Info:         DB Operation: Add parameter to command: scriptContents=print SubstitutedValue
+DB Operation: Create parameter
 Info:         DB Operation: Add parameter to command: applied=<date>
-DB Operation: Execute non query command: insert into [SchemaVersions] (ScriptName, Applied) values (@scriptName, @applied)
+DB Operation: Execute non query command: insert into [SchemaVersions] (ScriptName, ScriptContents, Applied) values (@scriptName, @scriptContents, @applied)
 DB Operation: Dispose command
 Info:         Upgrade successful
 DB Operation: Dispose connection

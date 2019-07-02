@@ -57,7 +57,7 @@ namespace DbUp.Support
 
         protected Func<IUpgradeLog> Log { get; private set; }
 
-        public string[] GetExecutedScripts()
+        public SqlScript[] GetExecutedScripts()
         {
             return ConnectionManager().ExecuteCommandsWithManagedConnection(dbCommandFactory =>
             {
@@ -65,14 +65,18 @@ namespace DbUp.Support
                 {
                     Log().WriteInformation("Fetching list of already executed scripts.");
 
-                    var scripts = new List<string>();
+                    var scripts = new List<SqlScript>();
 
                     using (var command = GetJournalEntriesCommand(dbCommandFactory))
                     {
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
-                                scripts.Add((string) reader[0]);
+                            {
+                                string name = (string)reader[0];
+                                string contents = (string)reader[1];
+                                scripts.Add(new SqlScript(name, contents));
+                            }
                         }
                     }
 
@@ -81,7 +85,7 @@ namespace DbUp.Support
                 else
                 {
                     Log().WriteInformation("Journal table does not exist");
-                    return new string[0];
+                    return new SqlScript[0];
                 }
             });
         }
@@ -109,12 +113,17 @@ namespace DbUp.Support
             scriptNameParam.Value = script.Name;
             command.Parameters.Add(scriptNameParam);
 
+            var scriptContentsParam = command.CreateParameter();
+            scriptContentsParam.ParameterName = "scriptContents";
+            scriptContentsParam.Value = script.Contents;
+            command.Parameters.Add(scriptContentsParam);
+
             var appliedParam = command.CreateParameter();
             appliedParam.ParameterName = "applied";
             appliedParam.Value = DateTime.Now;
             command.Parameters.Add(appliedParam);
 
-            command.CommandText = GetInsertJournalEntrySql("@scriptName", "@applied");
+            command.CommandText = GetInsertJournalEntrySql("@scriptName", "@scriptContents", "@applied");
             command.CommandType = CommandType.Text;
             return command;
         }
@@ -140,9 +149,10 @@ namespace DbUp.Support
         /// Sql for inserting a journal entry
         /// </summary>
         /// <param name="scriptName">Name of the script name param (i.e @scriptName)</param>
+        /// <param name="scriptContents">Contents of the script (i.e @scriptContents)</param>
         /// <param name="applied">Name of the applied param (i.e @applied)</param>
         /// <returns></returns>
-        protected abstract string GetInsertJournalEntrySql(string @scriptName, string @applied);
+        protected abstract string GetInsertJournalEntrySql(string @scriptName, string @scriptContents, string @applied);
 
         /// <summary>
         /// Sql for getting the journal entries

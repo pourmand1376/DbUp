@@ -24,9 +24,9 @@ namespace DbUp.Postgresql
         {
         }
 
-        protected override string GetInsertJournalEntrySql(string @scriptName, string @applied)
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied)
         {
-            return $"insert into {FqSchemaTableName} (ScriptName, Applied) values ({@scriptName}, {@applied})";
+            return $"insert into {FqSchemaTableName} (ScriptName, ScriptContents, Applied) values ({@scriptName}, {@scriptContents}, {@applied})";
         }
 
         protected override string GetJournalEntriesSql()
@@ -41,9 +41,12 @@ $@"CREATE TABLE {FqSchemaTableName}
 (
     schemaversionsid serial NOT NULL,
     scriptname character varying(255) NOT NULL,
+    scriptcontents character varying(MAX) NOT NULL,
     applied timestamp without time zone NOT NULL,
     CONSTRAINT {quotedPrimaryKeyName} PRIMARY KEY (schemaversionsid)
 )";
         }
+
+
     }
 }

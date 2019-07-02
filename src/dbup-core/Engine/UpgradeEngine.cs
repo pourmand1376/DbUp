@@ -68,10 +68,8 @@ namespace DbUp.Engine
                     foreach (var script in scriptsToExecute)
                     {
                         executedScriptName = script.Name;
-
-                        configuration.ScriptExecutor.Execute(script, configuration.Variables);
-
-                        executed.Add(script);
+                        SqlScript replacedScript = configuration.ScriptExecutor.Execute(script, configuration.Variables);
+                        executed.Add(replacedScript);
                     }
 
                     configuration.Log.WriteInformation("Upgrade successful");
@@ -101,14 +99,14 @@ namespace DbUp.Engine
         private List<SqlScript> GetScriptsToExecuteInsideOperation()
         {
             var allScripts = configuration.ScriptProviders.SelectMany(scriptProvider => scriptProvider.GetScripts(configuration.ConnectionManager));
-            var executedScriptNames = new HashSet<string>(configuration.Journal.GetExecutedScripts());
+            var executedScripts = configuration.Journal.GetExecutedScripts();
 
             var sorted = allScripts.OrderBy(s => s.SqlScriptOptions.RunGroupOrder).ThenBy(s => s.Name, configuration.ScriptNameComparer);
-            var filtered = configuration.ScriptFilter.Filter(sorted, executedScriptNames, configuration.ScriptNameComparer);
+            var filtered = configuration.ScriptFilter.Filter(sorted, executedScripts, configuration.ScriptNameComparer);
             return filtered.ToList();
         }
 
-        public List<string> GetExecutedScripts()
+        public List<SqlScript> GetExecutedScripts()
         {
             using (configuration.ConnectionManager.OperationStarting(configuration.Log, new List<SqlScript>()))
             {

@@ -24,14 +24,13 @@ namespace DbUp.MySql
         {
         }
 
-        protected override string GetInsertJournalEntrySql(string @scriptName, string @applied)
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied)
         {
-            return $"insert into {FqSchemaTableName} (ScriptName, Applied) values ({@scriptName}, {@applied})";
+            return $"insert into {FqSchemaTableName} (ScriptName, ScriptContents, Applied) values ({@scriptName}, {scriptContents}, {@applied})";
         }
-
         protected override string GetJournalEntriesSql()
         {
-            return $"select scriptname from {FqSchemaTableName} order by scriptname";
+            return $"select scriptname, scriptcontents from {FqSchemaTableName} order by scriptname";
         }
 
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName)
@@ -41,9 +40,12 @@ $@"CREATE TABLE {FqSchemaTableName}
 (
     `schemaversionid` INT NOT NULL AUTO_INCREMENT,
     `scriptname` VARCHAR(255) NOT NULL,
+    `scriptcontents` VARCHAR(MAX) NOT NULL,
     `applied` TIMESTAMP NOT NULL,
     PRIMARY KEY (`schemaversionid`)
 );";
         }
+
+
     }
 }

@@ -34,6 +34,7 @@ namespace DbUp.Oracle
                 (
                     schemaversionid NUMBER(10),
                     scriptname VARCHAR2(255) NOT NULL,
+                    scriptcontents VARCHAR2(MAX) NOT NULL,
                     applied TIMESTAMP NOT NULL,
                     CONSTRAINT PK_{ fqSchemaTableName } PRIMARY KEY (schemaversionid) 
                 )";
@@ -59,16 +60,16 @@ namespace DbUp.Oracle
                 ";
         }
 
-        protected override string GetInsertJournalEntrySql(string scriptName, string applied)
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied)
         {
             var unquotedSchemaTableName = UnquotedSchemaTableName.ToUpper(English);
-            return $"insert into {unquotedSchemaTableName} (ScriptName, Applied) values (:" + scriptName.Replace("@","") + ",:" + applied.Replace("@","") + ")";
+            return $"insert into {unquotedSchemaTableName} (ScriptName, ScriptContents, Applied) values (:" + scriptName.Replace("@", "") + ",:" + scriptContents.Replace("@", "") + ",:" + applied.Replace("@", "") + ")";
         }
 
         protected override string GetJournalEntriesSql()
         {
             var unquotedSchemaTableName = UnquotedSchemaTableName.ToUpper(English);
-            return $"select scriptname from {unquotedSchemaTableName} order by scriptname";
+            return $"select scriptname, scriptcontents from {unquotedSchemaTableName} order by scriptname";
         }
 
         protected override string DoesTableExistSql()
@@ -124,5 +125,7 @@ namespace DbUp.Oracle
 
             journalExists = true;
         }
+
+
     }
 }

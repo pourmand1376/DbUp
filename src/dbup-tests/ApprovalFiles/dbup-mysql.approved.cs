@@ -47,7 +47,7 @@ namespace DbUp.MySql
     {
         public MySqlTableJournal(System.Func<DbUp.Engine.Transactions.IConnectionManager> connectionManager, System.Func<DbUp.Engine.Output.IUpgradeLog> logger, string schema, string table) { }
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName) { }
-        protected override string GetInsertJournalEntrySql(string scriptName, string applied) { }
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied) { }
         protected override string GetJournalEntriesSql() { }
     }
 }

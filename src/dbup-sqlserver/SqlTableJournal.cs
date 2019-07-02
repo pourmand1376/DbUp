@@ -26,14 +26,14 @@ namespace DbUp.SqlServer
         {
         }
 
-        protected override string GetInsertJournalEntrySql(string @scriptName, string @applied)
+        protected override string GetInsertJournalEntrySql(string @scriptName, string @scriptContents, string @applied)
         {
-            return $"insert into {FqSchemaTableName} (ScriptName, Applied) values ({@scriptName}, {@applied})";
+            return $"insert into {FqSchemaTableName} (ScriptName, ScriptContents, Applied) values ({@scriptName}, {@scriptContents}, {@applied})";
         }
 
         protected override string GetJournalEntriesSql()
         {
-            return $"select [ScriptName] from {FqSchemaTableName} order by [ScriptName]";
+            return $"select [ScriptName], [ScriptContents] from {FqSchemaTableName} order by [ScriptName]";
         }
 
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName)
@@ -42,6 +42,7 @@ namespace DbUp.SqlServer
 $@"create table {FqSchemaTableName} (
     [Id] int identity(1,1) not null constraint {quotedPrimaryKeyName} primary key,
     [ScriptName] nvarchar(255) not null,
+    [ScriptContents] nvarchar(max) not null,
     [Applied] datetime not null
 )";
         }

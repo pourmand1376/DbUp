@@ -35,7 +35,7 @@ namespace DbUp.SQLite
         public SQLiteTableJournal(System.Func<DbUp.Engine.Transactions.IConnectionManager> connectionManager, System.Func<DbUp.Engine.Output.IUpgradeLog> logger, string table) { }
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName) { }
         protected override string DoesTableExistSql() { }
-        protected override string GetInsertJournalEntrySql(string scriptName, string applied) { }
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied) { }
         protected override string GetJournalEntriesSql() { }
     }
 }

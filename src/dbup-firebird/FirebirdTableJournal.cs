@@ -71,14 +71,14 @@ END;";
             return $"select 1 from RDB$RELATIONS where RDB$SYSTEM_FLAG = 0 and RDB$RELATION_NAME = '{UnquotedSchemaTableName}'";
         }
 
-        protected override string GetInsertJournalEntrySql(string @scriptName, string @applied)
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied)
         {
-            return $"insert into {FqSchemaTableName} (ScriptName, Applied) values ({scriptName}, {applied})";
+            return $"insert into {FqSchemaTableName} (ScriptName, ScriptContents, Applied) values ({scriptName}, {applied})";
         }
 
         protected override string GetJournalEntriesSql()
         {
-            return $"select ScriptName from {FqSchemaTableName} order by ScriptName";
+            return $"select ScriptName, ScriptContents from {FqSchemaTableName} order by ScriptName";
         }
 
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName)
@@ -88,9 +88,12 @@ $@"CREATE TABLE {FqSchemaTableName}
 (
     schemaversionsid INTEGER NOT NULL,
     scriptname VARCHAR(255) NOT NULL,
+    scriptcontents VARCHAR(MAX) NOT NULL
     applied TIMESTAMP NOT NULL,
     CONSTRAINT pk_{UnquotedSchemaTableName}_id PRIMARY KEY (schemaversionsid)
 )";
         }
+
+
     }
 }

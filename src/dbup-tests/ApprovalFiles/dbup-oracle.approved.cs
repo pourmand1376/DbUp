@@ -52,7 +52,7 @@ namespace DbUp.Oracle
         public override void EnsureTableExistsAndIsLatestVersion(System.Func<System.Data.IDbCommand> dbCommandFactory) { }
         protected System.Data.IDbCommand GetCreateTableSequence(System.Func<System.Data.IDbCommand> dbCommandFactory) { }
         protected System.Data.IDbCommand GetCreateTableTrigger(System.Func<System.Data.IDbCommand> dbCommandFactory) { }
-        protected override string GetInsertJournalEntrySql(string scriptName, string applied) { }
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied) { }
         protected override string GetJournalEntriesSql() { }
     }
 }

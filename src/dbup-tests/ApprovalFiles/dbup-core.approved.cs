@@ -146,7 +146,7 @@ namespace DbUp.Engine
     public interface IJournal
     {
         void EnsureTableExistsAndIsLatestVersion(System.Func<System.Data.IDbCommand> dbCommandFactory);
-        string[] GetExecutedScripts();
+        DbUp.Engine.SqlScript[] GetExecutedScripts();
         void StoreExecutedScript(DbUp.Engine.SqlScript script, System.Func<System.Data.IDbCommand> dbCommandFactory);
     }
     public interface IScript
@@ -157,12 +157,12 @@ namespace DbUp.Engine
     {
         System.Nullable<int> ExecutionTimeoutSeconds { get; set; }
         void Execute(DbUp.Engine.SqlScript script);
-        void Execute(DbUp.Engine.SqlScript script, System.Collections.Generic.IDictionary<string, string> variables);
+        DbUp.Engine.SqlScript Execute(DbUp.Engine.SqlScript script, System.Collections.Generic.IDictionary<string, string> variables);
         void VerifySchema();
     }
     public interface IScriptFilter
     {
-        System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> Filter(System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> sorted, System.Collections.Generic.HashSet<string> executedScriptNames, DbUp.Support.ScriptNameComparer comparer);
+        System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> Filter(System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> sorted, System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> executedScripts, DbUp.Support.ScriptNameComparer comparer);
     }
     public interface IScriptPreprocessor
     {
@@ -208,7 +208,7 @@ namespace DbUp.Engine
     public class UpgradeEngine
     {
         public UpgradeEngine(DbUp.Builder.UpgradeConfiguration configuration) { }
-        public System.Collections.Generic.List<string> GetExecutedScripts() { }
+        public System.Collections.Generic.List<DbUp.Engine.SqlScript> GetExecutedScripts() { }
         public System.Collections.Generic.List<DbUp.Engine.SqlScript> GetScriptsToExecute() { }
         public bool IsUpgradeRequired() { }
         public DbUp.Engine.DatabaseUpgradeResult MarkAsExecuted() { }
@@ -222,7 +222,7 @@ namespace DbUp.Engine.Filters
     public class DefaultScriptFilter : DbUp.Engine.IScriptFilter
     {
         public DefaultScriptFilter() { }
-        public System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> Filter(System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> sorted, System.Collections.Generic.HashSet<string> executedScriptNames, DbUp.Support.ScriptNameComparer comparer) { }
+        public System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> Filter(System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> sorted, System.Collections.Generic.IEnumerable<DbUp.Engine.SqlScript> executedScripts, DbUp.Support.ScriptNameComparer comparer) { }
     }
 }
 namespace DbUp.Engine.Output
@@ -355,7 +355,7 @@ namespace DbUp.Helpers
     {
         public NullJournal() { }
         public void EnsureTableExistsAndIsLatestVersion(System.Func<System.Data.IDbCommand> dbCommandFactory) { }
-        public string[] GetExecutedScripts() { }
+        public DbUp.Engine.SqlScript[] GetExecutedScripts() { }
         public void StoreExecutedScript(DbUp.Engine.SqlScript script, System.Func<System.Data.IDbCommand> dbCommandFactory) { }
     }
     public static class UpgradeEngineHtmlReport
@@ -390,6 +390,7 @@ namespace DbUp.ScriptProviders
     {
         public FileSystemScriptOptions() { }
         public System.Text.Encoding Encoding { get; set; }
+        public string[] Extensions { get; set; }
         public System.Func<string, bool> Filter { get; set; }
         public bool IncludeSubDirectories { get; set; }
     }
@@ -420,7 +421,7 @@ namespace DbUp.Support
         protected System.Func<DbUp.Engine.Output.IUpgradeLog> Log { get; }
         public string Schema { get; set; }
         public virtual void Execute(DbUp.Engine.SqlScript script) { }
-        public virtual void Execute(DbUp.Engine.SqlScript script, System.Collections.Generic.IDictionary<string, string> variables) { }
+        public virtual DbUp.Engine.SqlScript Execute(DbUp.Engine.SqlScript script, System.Collections.Generic.IDictionary<string, string> variables) { }
         protected virtual void ExecuteAndLogOutput(System.Data.IDbCommand command) { }
         protected abstract void ExecuteCommandsWithinExceptionHandler(int index, DbUp.Engine.SqlScript script, System.Action excuteCallback);
         protected virtual void ExecuteNonQuery(System.Data.IDbCommand command) { }
@@ -512,8 +513,8 @@ namespace DbUp.Support
         protected virtual string DoesTableExistSql() { }
         public virtual void EnsureTableExistsAndIsLatestVersion(System.Func<System.Data.IDbCommand> dbCommandFactory) { }
         protected System.Data.IDbCommand GetCreateTableCommand(System.Func<System.Data.IDbCommand> dbCommandFactory) { }
-        public string[] GetExecutedScripts() { }
-        protected abstract string GetInsertJournalEntrySql(string scriptName, string applied);
+        public DbUp.Engine.SqlScript[] GetExecutedScripts() { }
+        protected abstract string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied);
         protected System.Data.IDbCommand GetInsertScriptCommand(System.Func<System.Data.IDbCommand> dbCommandFactory, DbUp.Engine.SqlScript script) { }
         protected System.Data.IDbCommand GetJournalEntriesCommand(System.Func<System.Data.IDbCommand> dbCommandFactory) { }
         protected abstract string GetJournalEntriesSql();

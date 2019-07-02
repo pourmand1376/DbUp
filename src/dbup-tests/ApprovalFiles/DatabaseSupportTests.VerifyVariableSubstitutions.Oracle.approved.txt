@@ -15,6 +15,7 @@ DB Operation: Execute non query command:  CREATE TABLE schemaversions
                 (
                     schemaversionid NUMBER(10),
                     scriptname VARCHAR2(255) NOT NULL,
+                    scriptcontents VARCHAR2(MAX) NOT NULL,
                     applied TIMESTAMP NOT NULL,
                     CONSTRAINT PK_schemaversions PRIMARY KEY (schemaversionid) 
                 )
@@ -35,8 +36,10 @@ DB Operation: Dispose command
 DB Operation: Create parameter
 Info:         DB Operation: Add parameter to command: scriptName=Script0001.sql
 DB Operation: Create parameter
+Info:         DB Operation: Add parameter to command: scriptContents=print SubstitutedValue
+DB Operation: Create parameter
 Info:         DB Operation: Add parameter to command: applied=<date>
-DB Operation: Execute non query command: insert into SCHEMAVERSIONS (ScriptName, Applied) values (:scriptName,:applied)
+DB Operation: Execute non query command: insert into SCHEMAVERSIONS (ScriptName, ScriptContents, Applied) values (:scriptName,:scriptContents,:applied)
 DB Operation: Dispose command
 Info:         Upgrade successful
 DB Operation: Dispose connection

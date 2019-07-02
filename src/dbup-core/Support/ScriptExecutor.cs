@@ -101,14 +101,18 @@ namespace DbUp.Support
             return contents;
         }
 
+
         /// <summary>
         /// Executes the specified script against a database at a given connection string.
         /// </summary>
         /// <param name="script">The script.</param>
         /// <param name="variables">Variables to replace in the script</param>
-        public virtual void Execute(SqlScript script, IDictionary<string, string> variables)
+        /// <returns>The script with variables replaced</returns>
+        public virtual SqlScript Execute(SqlScript script, IDictionary<string, string> variables)
         {
             var contents = PreprocessScriptContents(script, variables);
+            script = new SqlScript(script.Name, contents, script.SqlScriptOptions);
+
             Log().WriteInformation("Executing Database Server script '{0}'", script.Name);
 
             var connectionManager = connectionManagerFactory();
@@ -164,6 +168,8 @@ namespace DbUp.Support
                 Log().WriteError("{0}", ex.ToString());
                 throw;
             }
+
+            return script;
         }
 
         protected abstract void ExecuteCommandsWithinExceptionHandler(int index, SqlScript script, Action excuteCallback);
@@ -238,6 +244,8 @@ namespace DbUp.Support
                 Log().WriteInformation("\r\n");
             } while (reader.NextResult());
         }
+
+
 
         protected Func<IUpgradeLog> Log { get; private set; }
     }

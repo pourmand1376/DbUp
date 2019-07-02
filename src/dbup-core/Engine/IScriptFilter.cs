@@ -6,6 +6,6 @@ namespace DbUp.Engine
 {
     public interface IScriptFilter
     {
-        IEnumerable<SqlScript> Filter(IEnumerable<SqlScript> sorted, HashSet<string> executedScriptNames, ScriptNameComparer comparer);
+        IEnumerable<SqlScript> Filter(IEnumerable<SqlScript> sorted, IEnumerable<SqlScript> executedScripts, ScriptNameComparer comparer);
     }
 }

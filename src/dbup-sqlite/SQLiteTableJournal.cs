@@ -19,14 +19,14 @@ namespace DbUp.SQLite
             base(connectionManager, logger, new SQLiteObjectParser(), null, table)
         { }
 
-        protected override string GetInsertJournalEntrySql(string @scriptName, string @applied)
+        protected override string GetInsertJournalEntrySql(string scriptName, string scriptContents, string applied)
         {
-            return $"insert into {FqSchemaTableName} (ScriptName, Applied) values ({@scriptName}, {@applied})";
+            return $"insert into {FqSchemaTableName} (ScriptName, ScriptContents, Applied) values ({@scriptName}, {@scriptContents}, {@applied})";
         }
 
         protected override string GetJournalEntriesSql()
         {
-            return $"select [ScriptName] from {FqSchemaTableName} order by [ScriptName]";
+            return $"select [ScriptName], [ScriptContents] from {FqSchemaTableName} order by [ScriptName]";
         }
 
         protected override string CreateSchemaTableSql(string quotedPrimaryKeyName)
@@ -35,6 +35,7 @@ namespace DbUp.SQLite
 $@"CREATE TABLE {FqSchemaTableName} (
     SchemaVersionID INTEGER CONSTRAINT {quotedPrimaryKeyName} PRIMARY KEY AUTOINCREMENT NOT NULL,
     ScriptName TEXT NOT NULL,
+    ScriptContents TEXT NOT NULL,
     Applied DATETIME NOT NULL
 )";
         }
@@ -43,5 +44,7 @@ $@"CREATE TABLE {FqSchemaTableName} (
         {
             return $"SELECT count(name) FROM sqlite_master WHERE type = 'table' AND name = '{UnquotedSchemaTableName}'";
         }
+
+
     }
 }

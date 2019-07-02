@@ -43,8 +43,10 @@ namespace DbUp.Tests.Support.SQLite
             var command = Substitute.For<IDbCommand>();
             var param1 = Substitute.For<IDbDataParameter>();
             var param2 = Substitute.For<IDbDataParameter>();
+            var param3 = Substitute.For<IDbDataParameter>();
+
             dbConnection.CreateCommand().Returns(command);
-            command.CreateParameter().Returns(param1, param2);
+            command.CreateParameter().Returns(param1, param2, param3);
             command.ExecuteScalar().Returns(x => 0);
             var consoleUpgradeLog = new ConsoleUpgradeLog();
             var journal = new SQLiteTableJournal(() => connectionManager, () => consoleUpgradeLog, "SchemaVersions");
@@ -53,9 +55,10 @@ namespace DbUp.Tests.Support.SQLite
             journal.StoreExecutedScript(new SqlScript("test", "select 1"), () => command);
 
             // Expect
-            command.Received(2).CreateParameter();
+            command.Received(3).CreateParameter();
             param1.ParameterName.ShouldBe("scriptName");
-            param2.ParameterName.ShouldBe("applied");
+            param2.ParameterName.ShouldBe("scriptContents");
+            param3.ParameterName.ShouldBe("applied");
             command.Received().ExecuteNonQuery();
         }
     }
