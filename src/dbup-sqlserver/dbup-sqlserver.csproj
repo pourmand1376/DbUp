@@ -18,6 +18,8 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AssemblyVersion>1.0.0807.5</AssemblyVersion>
+    <FileVersion>1.0.0807.5</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

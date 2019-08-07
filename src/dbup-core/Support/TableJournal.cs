@@ -5,6 +5,7 @@ using System.Data.Common;
 using DbUp.Engine;
 using DbUp.Engine.Output;
 using DbUp.Engine.Transactions;
+using DbUp.Helpers;
 
 // ReSharper disable MemberCanBePrivate.Global
 namespace DbUp.Support
@@ -116,7 +117,7 @@ namespace DbUp.Support
 
             var scriptContentsParam = command.CreateParameter();
             scriptContentsParam.ParameterName = "scriptContents";
-            scriptContentsParam.Value = script.Contents;
+            scriptContentsParam.Value = script.Contents.MD5();
             command.Parameters.Add(scriptContentsParam);
 
             var appliedParam = command.CreateParameter();

@@ -1,6 +1,7 @@
 ﻿using System;
 using DbUp.Engine.Output;
 using DbUp.Engine.Transactions;
+using DbUp.Helpers;
 using DbUp.Support;
 
 namespace DbUp.SqlServer
@@ -42,7 +43,7 @@ namespace DbUp.SqlServer
 $@"create table {FqSchemaTableName} (
     [Id] int identity(1,1) not null constraint {quotedPrimaryKeyName} primary key,
     [ScriptName] nvarchar(255) not null,
-    [ScriptContents] nvarchar(max) not null,
+    [ScriptContents] varchar(32) not null,
     [Applied] datetime not null
 )";
         }

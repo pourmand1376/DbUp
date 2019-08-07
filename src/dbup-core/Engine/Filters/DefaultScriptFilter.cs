@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DbUp.Helpers;
 using DbUp.Support;
 
 namespace DbUp.Engine.Filters
@@ -11,6 +12,7 @@ namespace DbUp.Engine.Filters
         {
             var groupedExecutedScripts = executedScripts.GroupBy(s => s.Name).ToDictionary(x => x.Key, x => x.ToList());
 
+            
             return sorted.Where((s) =>
             {
                 if (s.SqlScriptOptions.ScriptType == ScriptType.RunAlways)

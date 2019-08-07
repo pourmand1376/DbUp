@@ -3,7 +3,9 @@
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
     <RootNamespace>SampleApplication</RootNamespace>
     <AssemblyName>SampleApplication</AssemblyName> 
-    <OutputType>Exe</OutputType>
+    <OutputType>Exe</OutputType> 
+    <AssemblyVersion>1.0.0807.4</AssemblyVersion> 
+    <FileVersion>1.0.0807.4</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\dbup-sqlserver\dbup-sqlserver.csproj" />
