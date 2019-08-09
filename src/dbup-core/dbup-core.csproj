@@ -20,8 +20,8 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DefineConstants>$(DefineConstants);LIBLOG_PORTABLE;LIBLOG_PROVIDERS_ONLY</DefineConstants>
-    <AssemblyVersion>1.0.0807.5</AssemblyVersion>
-    <FileVersion>1.0.0807.5</FileVersion>
+    <AssemblyVersion>1.0.0809.12</AssemblyVersion>
+    <FileVersion>1.0.0809.12</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' != 'net35' ">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DbUp.Builder;
 using DbUp.Engine.Filters;
+using DbUp.Helpers;
 
 namespace DbUp.Engine
 {
@@ -69,7 +70,7 @@ namespace DbUp.Engine
                     {
                         executedScriptName = script.Name;
                         SqlScript replacedScript = configuration.ScriptExecutor.Execute(script, configuration.Variables);
-                        executed.Add(replacedScript);
+                        executed.Add(replacedScript.GetMd5ContentScript());
                     }
 
                     configuration.Log.WriteInformation("Upgrade successful");

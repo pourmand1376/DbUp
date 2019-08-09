@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text;
+using DbUp.Helpers;
 using DbUp.Support;
 
 namespace DbUp.Engine
@@ -49,6 +50,10 @@ namespace DbUp.Engine
         /// <value></value>
         public virtual string Contents { get; }
 
+        public SqlScript GetMd5ContentScript()
+        {
+            return new SqlScript(this.Name,this.Contents.MD5(),this.Applied,this.SqlScriptOptions);
+        }
         /// <summary>
         /// Gets the SQL Script Options
         /// </summary>
@@ -162,5 +167,6 @@ namespace DbUp.Engine
                 return new SqlScript(scriptName, c, sqlScriptOptions);
             }
         }
+       
     }
 }
